@@ -40,12 +40,14 @@ Installation
 		'fsmanager' => [
 			'class' => tsdogs\fsmanager\Module::className(),
 			'tempPath' => '@app/uploads/temp',
-			'basePath' => '@app/uploads/store',
+			'publicPath' => '@app/uploads/store',
 			'rules' => [ // Rules according to the FileValidator
 			    'maxFiles' => 10, // Allow to upload maximum 3 files, default to 3
 				'mimeTypes' => 'image/png', // Only png images
 				'maxSize' => 1024 * 1024 // 1 MB
 			],
+			'viewRoles' => ['@'], // roles able to view files
+			'uploadRoles' => ['admins'], // roles able to manage files
 		]
 		...
 	]
