@@ -1,0 +1,42 @@
+{
+  "name": "tsdogs/yii2-fsmanager",
+  "description": "Module for a simple File Manager",
+  "type": "yii2-extension",
+  "keywords": [
+    "yii2",
+    "extension",
+    "management",
+    "file",
+    "upload"
+  ],
+  "license": "BSD-4-Clause",
+  "homepage": "https://github.com/tsdogs/yii2-fsmanager",
+  "authors": [
+    {
+      "name": "Alessandro Briosi",
+      "email": "tsdogs@briosix.org",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "yiisoft/yii2": "~2.0.0",
+    "kartik-v/yii2-grid": "~3.1",
+    "kartik-v/yii2-widget-fileinput": "~1.0.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0",
+    "phpunit/dbunit": "~1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "tsdogs\\fsmanager\\": "src"
+    }
+  },
+  "extra": {
+    "asset-installer-paths": {
+      "npm-asset-library": "vendor/npm",
+      "bower-asset-library": "vendor/bower"
+    }
+  }
+}
