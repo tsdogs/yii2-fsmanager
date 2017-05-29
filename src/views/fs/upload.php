@@ -49,7 +49,7 @@ use kartik\widgets\FileInput;
 <hr />
 <div>
     <div class="form-group pull-right">
-        <?= Html::a('<i class="glyphicon glyphicon-cancel"></i> '.Yii::t('yii','Cancel'), '#', ['class' => 'btn btn-default','
+        <?= Html::a('<i class="glyphicon glyphicon-cancel"></i> '.Yii::t('fsmanager','Cancel'), '#', ['class' => 'btn btn-default','
                     data-dismiss'=>"modal"]) ?>
     </div>
 <div class="clearfix"></div>

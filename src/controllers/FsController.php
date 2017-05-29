@@ -127,6 +127,7 @@ class FsController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $path = FileHelper::normalizePath($p);
         $dir = $this->module->getPublicPath() . DIRECTORY_SEPARATOR . $path;
+        $dir = FileHelper::normalizePath($dir);
         if (is_dir($dir)) {
             $files = \yii\web\UploadedFile::getInstancesByName('upload');
             $ok = true;
@@ -142,11 +143,28 @@ class FsController extends Controller
                 if ($ok) {
                     return [ ];
                 } else {
-                    return [ 'error'=>Yii::t('yii','File upload failed!') ];
+                    return [ 'error'=>Yii::t('fsmanager','File upload failed!') ];
+                }
+            } else {
+                return [ 'error'=>Yii::t('fsmanager','Files were not accepted. (Size is too big?)') ];
+            }
+        }
+        return [ 'error'=>Yii::t('fsmanager','Something went wrong!') ];
+    }
+    
+    public function actionCreate($p)
+    {
+        if (isset(Yii::$app->request->post()['directory'])) {
+            $d = str_replace(DIRECTORY_SEPARATOR,'_',Yii::$app->request->post()['directory']);
+            if ($d != '') {
+                $path = FileHelper::normalizePath($p . DIRECTORY_SEPARATOR . $d);
+                $dir = $this->module->getPublicPath() . DIRECTORY_SEPARATOR . $path;
+                if (!FileHelper::createDirectory($dir)) {
+                    Yii::$app->setFlash('error',Yii::t('fsmanager','Directory could not be created!'));
                 }
             }
         }
-        return [ 'error'=>Yii::t('yii','Something went wrong!') ];
+        return $this->redirect(['index','p'=>$p]);
     }
     
     private function canUpload()

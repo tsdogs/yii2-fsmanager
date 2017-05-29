@@ -2,6 +2,7 @@
 
 namespace tsdogs\fsmanager;
 
+use Yii;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
@@ -24,6 +25,7 @@ class Module extends \yii\base\Module
 
     public function init()
     {
+        $this->registerTranslations();
         parent::init();
 
         if (empty($this->publicPath) || empty($this->tempPath)) {
@@ -32,24 +34,18 @@ class Module extends \yii\base\Module
 
         $this->rules = ArrayHelper::merge(['maxFiles' => 3], $this->rules);
         $this->defaultRoute = 'fs';
-        $this->registerTranslations();
     }
 
     public function registerTranslations()
     {
-        \Yii::$app->i18n->translations['tsdogs/*'] = [
-            'class' => PhpMessageSource::className(),
-            'sourceLanguage' => 'en',
-            'publicPath' => '@vendor/tsdogs/yii2-fsmanager/src/messages',
-            'fileMap' => [
-                'tsdogs/fsmanager' => 'fsmanager.php'
-            ],
-        ];
-    }
-
-    public static function t($category, $message, $params = [], $language = null)
-    {
-        return \Yii::t('tsdogs/' . $category, $message, $params, $language);
+    
+        if (!isset(Yii::$app->get('i18n')->translations['fsmanager*'])) {
+            Yii::$app->get('i18n')->translations['fsmanager*'] = [
+                'class'    => 'yii\i18n\PhpMessageSource',
+                'basePath' => __DIR__ . '/messages',
+                'sourceLanguage' => 'en',
+            ];
+        }    
     }
 
     public function getPublicPath()

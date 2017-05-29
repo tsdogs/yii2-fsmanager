@@ -2,10 +2,12 @@
 
 use kartik\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use kartik\popover\PopoverX;
 
 Yii::$app->formatter->sizeFormatBase = 1000;
-$this->title = Yii::t('yii','Documents').' '.$path;
+$this->title = Yii::t('fsmanager','Documents').' '.$path;
 
 $fp = '';
 $links = [];
@@ -20,15 +22,38 @@ foreach (explode(DIRECTORY_SEPARATOR, $path) as $p) {
 }
 $toolbar = false;
 if ($upload) {
-    $toolbar = Html::a('<i class="glyphicon glyphicon-folder-close"></i> '.Yii::t('yii','Crate directory'),['index'],['class'=>'btn btn-warning']).
-                Html::a('<i class="glyphicon glyphicon-upload"></i> '.Yii::t('yii','Upload'),['index'],[
-                    'class'=>'btn btn-success',
-                    'onclick'=>'$(\'#attach\').modal(); return false;',
-                ]).
-                Html::a('<i class="glyphicon glyphicon-remove"></i> '.Yii::t('yii','Delete'),['index'],['class'=>'btn btn-danger']);
-                
+    $this->beginBlock('toolbar');
+    PopoverX::begin([
+            'header' => Yii::t('fsmanager','Create directory'),
+            'headerOptions' => ['encode'=>false,],
+            'placement' => PopoverX::ALIGN_BOTTOM_RIGHT,
+            'footer' => Html::button(Yii::t('fsmanager','Create'), [
+                'class'=>'btn btn-sm btn-primary',
+                'onclick' => '$("#create-dir").trigger("submit")'
+                ]),
+            'toggleButton' => [
+                'label'=>'<i class="glyphicon glyphicon-folder-close"></i> '.Yii::t('fsmanager','Create directory'), 
+                'class'=>'btn btn-warning',
+            ],
+        ]);
+    echo Html::beginForm(['create','p'=>$path],'POST',['id'=>'create-dir']);
+   
+    echo Html::textInput('directory','',[]);
+    echo Html::endForm();
+    PopoverX::end();
+
+    echo Html::a('<i class="glyphicon glyphicon-upload"></i> '.Yii::t('fsmanager','Upload'),['index'],[
+                'class'=>'btn btn-success',
+                'onclick'=>'$(\'#attach\').modal(); return false;',
+        ]); 
+    echo Html::a('<i class="glyphicon glyphicon-remove"></i> '.Yii::t('fsmanager','Delete'),['index'],['class'=>'btn btn-danger']); 
+
+    $this->endBlock();
+    
+    $toolbar = $this->blocks['toolbar'];
+    
     Modal::begin([
-        'header' => '<h2>'.Yii::t('yii','Upload').'</h2>',
+        'header' => '<h2>'.Yii::t('fsmanager','Upload').'</h2>',
         'id' => 'attach',
         'size' => 'modal-lg',
     ]);
@@ -50,20 +75,24 @@ if ($upload) {
                     return Html::a('<i class="glyphicon glyphicon-file"></i> '.$model['name'],['view','p'=>$model['path'].DIRECTORY_SEPARATOR.$model['name']],[]);
                 }
             },
-            'label' => Yii::t('yii','Name'),
+            'label' => Yii::t('fsmanager','Name'),
         ],
         [
             'attribute'=>'size',
             'value'=> function ($model) { return isset($model['size'])?Yii::$app->formatter->asShortSize($model['size'],1):''; },
             'format'=>'raw',
             'contentOptions'=>['style' => 'text-align: right'],
-            'label' => Yii::t('yii','Size'),
+            'label' => Yii::t('fsmanager','Size'),
         ],
         [
             'attribute' => 'time',
             'format' => 'datetime',
             'contentOptions'=>['style' => 'text-align: right'],
-            'label' => Yii::t('yii','Date'),
+            'label' => Yii::t('fsmanager','Date'),
+        ],
+        [
+            'class'=>'kartik\grid\CheckboxColumn',
+            'visible' => $upload,
         ],
         
     ],
