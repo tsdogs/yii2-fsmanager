@@ -46,7 +46,10 @@ if ($upload) {
                 'class'=>'btn btn-success',
                 'onclick'=>'$(\'#attach\').modal(); return false;',
         ]); 
-    echo Html::a('<i class="glyphicon glyphicon-remove"></i> '.Yii::t('fsmanager','Delete'),['index'],['class'=>'btn btn-danger']); 
+    echo Html::a('<i class="glyphicon glyphicon-remove"></i> '.Yii::t('fsmanager','Delete'),'#',[
+        'class'=>'btn btn-danger',
+        'onclick' => 'if (confirm("'.Yii::t('fsmanager','Are you sure you want to remove selected elements?').'")) { $("#delete-form").trigger("submit"); } return false;',
+    ]); 
 
     $this->endBlock();
     
@@ -59,12 +62,20 @@ if ($upload) {
     ]);
     echo $this->render('upload',['path'=>$path]);
     Modal::end();
+    
 }
 ?>
-
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
+    'id' => 'fsgrid',
     'columns' => [
+        [
+            'class'=>'kartik\grid\CheckboxColumn',
+            'checkboxOptions' => function ($model) {
+                return ['value'=>$model['name']];
+            },
+            'visible' => $upload,
+        ],
         [
             'attribute' => 'name',
             'format' => 'html',
@@ -76,6 +87,10 @@ if ($upload) {
                 }
             },
             'label' => Yii::t('fsmanager','Name'),
+        ],
+        [
+            'attribute' => 'name',
+            'hidden' => true,
         ],
         [
             'attribute'=>'size',
@@ -90,10 +105,6 @@ if ($upload) {
             'contentOptions'=>['style' => 'text-align: right'],
             'label' => Yii::t('fsmanager','Date'),
         ],
-        [
-            'class'=>'kartik\grid\CheckboxColumn',
-            'visible' => $upload,
-        ],
         
     ],
     'panel' => [
@@ -106,7 +117,8 @@ if ($upload) {
                 ],
             'links' => $links,
             'encodeLabels'=>false,
-        ])
+        ]).Html::beginForm(['delete','p'=>$path],'POST',['id'=>'delete-form']),
+        'after' => Html::endForm(),
     ],
     'toolbar' => $toolbar,
 ]);

@@ -167,6 +167,23 @@ class FsController extends Controller
         return $this->redirect(['index','p'=>$p]);
     }
     
+    public function actionDelete($p)
+    {
+        $path = FileHelper::normalizePath($p);
+        $base = $this->module->getPublicPath() . DIRECTORY_SEPARATOR . $path;
+        if (isset(Yii::$app->request->post()['selection']) and is_array(Yii::$app->request->post()['selection'])) {
+            foreach (Yii::$app->request->post()['selection'] as $f) {
+                $x = FileHelper::normalizePath($base. DIRECTORY_SEPARATOR . $f);
+                if (is_dir($x)) {
+                    FileHelper::removeDirectory($x);
+                } else {
+                    unlink($x);
+                }
+            }
+        }
+        return $this->redirect(['index','p'=>$p]);
+    }
+    
     private function canUpload()
     {
 

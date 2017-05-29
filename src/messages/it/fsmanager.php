@@ -17,15 +17,16 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Create' => 'Crea',
-    'Directory could not be created!' => 'Impossibile creare la cartella',
-    'Files were not accepted. (Size is too big?)' => 'I files non sono stati caricati. (Dimensioni troppo grandi?)',
+    'Are you sure you want to remove selected elements?' => 'Sei sicuro di voler eliminare gli elementi selezionati?',
     'Cancel' => 'Annulla',
+    'Create' => 'Crea',
     'Create directory' => 'Crea cartella',
     'Date' => 'Data',
     'Delete' => 'Elimina',
+    'Directory could not be created!' => 'Impossibile creare la cartella',
     'Documents' => 'Documenti',
     'File upload failed!' => 'Upload del file fallito!',
+    'Files were not accepted. (Size is too big?)' => 'I files non sono stati caricati. (Dimensioni troppo grandi?)',
     'Name' => 'Nome',
     'Size' => 'Dimensione',
     'Something went wrong!' => 'Qualcosa non ha funzionato!',
