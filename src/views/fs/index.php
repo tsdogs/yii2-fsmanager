@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use kartik\popover\PopoverX;
+use kartik\dialog\Dialog;
 
 Yii::$app->formatter->sizeFormatBase = 1000;
 $this->title = Yii::t('fsmanager','Documents').' '.$path;
@@ -46,6 +47,8 @@ if ($upload) {
                 'class'=>'btn btn-success',
                 'onclick'=>'$(\'#attach\').modal(); return false;',
         ]); 
+                    
+       
     echo Html::a('<i class="glyphicon glyphicon-remove"></i> '.Yii::t('fsmanager','Delete'),'#',[
         'class'=>'btn btn-danger',
         'onclick' => 'if (confirm("'.Yii::t('fsmanager','Are you sure you want to remove selected elements?').'")) { $("#delete-form").trigger("submit"); } return false;',
@@ -62,6 +65,26 @@ if ($upload) {
     ]);
     echo $this->render('upload',['path'=>$path]);
     Modal::end();
+
+    echo Dialog::widget([
+        'dialogDefaults'=>[
+            Dialog::DIALOG_PROMPT => [
+                'draggable' => false,
+                'title' => Yii::t('fsmanager','Rename'),
+                'buttons' => [
+                    [
+                        'label' => Yii::t('fsmanager','Cancel'),
+                        'icon' => Dialog::ICON_CANCEL
+                    ],
+                    [
+                        'label' => Yii::t('fsmanager','OK'),
+                        'icon' => Dialog::ICON_OK,
+                        'class' => 'btn-primary'
+                    ],
+                ]
+            ],
+        ]
+    ]);
     
 }
 ?>
@@ -104,6 +127,38 @@ if ($upload) {
             'format' => 'datetime',
             'contentOptions'=>['style' => 'text-align: right'],
             'label' => Yii::t('fsmanager','Date'),
+        ],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'template' => '{rename}',
+            'options'=>['style'=>'width: 100px; text-align:right;',],
+            'buttons' => [
+                'rename' => function ($url,$model,$key) {
+                    $name = $model['name'];
+                    $url = Url::to(['rename','p'=>$model['path'],'id'=>$model['name']]);
+                    $label = '<label for="krajee-dialog-prompt" class="control-label"> '.Yii::t('fsmanager','New name').'</label>';
+                    $input = '<input type="text" name="krajee-dialog-prompt" class="form-control" placeholder="Inserire il nuovo nome" value="'.$name.'" >';
+                    $click = <<<__EOF
+krajeeDialog.prompt('$label $input', function (result) {
+    if (result) {
+        $.ajax({
+            data: { name: result },
+            url: '$url',
+        }).done(function(data) {
+            window.location.reload();
+        });
+    }
+}); 
+    return false;
+__EOF;
+                    return Html::a('<i class="glyphicon glyphicon-edit"></i>','#',[
+                        'class' => 'btn-sm btn-default',
+                        'title' => Yii::t('fsmanager','Rename'),
+                        'onclick' => $click,
+                    ]);
+                },
+            ],
+            'header' => Yii::t('fsmanager','Actions'),
         ],
         
     ],

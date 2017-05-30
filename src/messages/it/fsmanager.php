@@ -17,6 +17,11 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Actions' => 'Azioni',
+    'Could not rename element' => 'Impossibile rinominare l\'elemento',
+    'New name' => 'Nuovo nome',
+    'OK' => 'OK',
+    'Rename' => 'Rinomina',
     'Are you sure you want to remove selected elements?' => 'Sei sicuro di voler eliminare gli elementi selezionati?',
     'Cancel' => 'Annulla',
     'Create' => 'Crea',

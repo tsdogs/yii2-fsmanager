@@ -39,7 +39,7 @@ class FsController extends Controller
                         'roles' => $this->module->accessRoles,                                                                                                    
                     ],
                     [                                                                                                                             
-                        'actions' => [ 'create', 'upload', 'delete' ],
+                        'actions' => [ 'create', 'upload', 'delete', 'rename' ],
                         'allow' => true,                                                                                                          
                         'roles' => $this->module->uploadRoles,                                                                                                    
                     ],
@@ -179,6 +179,20 @@ class FsController extends Controller
                 } else {
                     unlink($x);
                 }
+            }
+        }
+        return $this->redirect(['index','p'=>$p]);
+    }
+    
+    public function actionRename($p,$id,$name) 
+    {
+        if ($name!='') {
+            $path = FileHelper::normalizePath($p);
+            $base = $this->module->getPublicPath() . DIRECTORY_SEPARATOR . $path;
+            $org = FileHelper::normalizePath($base . DIRECTORY_SEPARATOR . $id);
+            $dest = FileHelper::normalizePath($base . DIRECTORY_SEPARATOR . $name);
+            if (!rename($org,$dest)) {
+                Yii::$app->user->setFlash(Yii::t('fsmanager','Could not rename element'));
             }
         }
         return $this->redirect(['index','p'=>$p]);
