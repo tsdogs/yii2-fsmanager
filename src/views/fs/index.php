@@ -74,11 +74,11 @@ if ($upload) {
                 'buttons' => [
                     [
                         'label' => Yii::t('fsmanager','Cancel'),
-                        'icon' => Dialog::ICON_CANCEL
+                        'icon' => 'glyphicon glyphicon-ban-circle',
                     ],
                     [
                         'label' => Yii::t('fsmanager','OK'),
-                        'icon' => Dialog::ICON_OK,
+                        'icon' => 'glyphicon glyphicon-ok',
                         'class' => 'btn-primary'
                     ],
                 ]
