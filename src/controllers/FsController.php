@@ -125,7 +125,7 @@ class FsController extends Controller
     
     public function actionUpload($p) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $path = FileHelper::normalizePath($p);
+        $path = FileHelper::normalizePath(urldecode($p));
         $dir = $this->module->getPublicPath() . DIRECTORY_SEPARATOR . $path;
         $dir = FileHelper::normalizePath($dir);
         if (is_dir($dir)) {
